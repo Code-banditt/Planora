@@ -22,6 +22,27 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "src/app/FormPage",
+    "src/app/_Components/pieCharts.js",
+    "src/app/_Components/Drawer.tsx",
+    "src/app/Dashboard/layout.js",
+    "src/app/Dashboard/transacted/userTransction.tsx",
+    "src/app/Dashboard/transacted/profTransactions.js",
+    "src/app/_Components/whychoose.js",
+    "src/app/_Components/use.js",
+    "src/app/_Components/list.js",
+    "src/app/_Components/SignIn.js",
+    "src/app/_Components/upcomingAppointments.tsx",
+    "src/app/_Components/calendarModal.js",
+    "src/app/_Components/reactFlow.js",
+    "src/app/findProfessional/page.js",
+    "src/app/_Components/AlertDis.tsx",
+    "src/libs/socketContext.tsx"
+  ],
   "exclude": ["node_modules"]
 }
