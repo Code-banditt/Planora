@@ -4,12 +4,13 @@ import React from "react";
 import { useSession } from "next-auth/react";
 import { useAppointments } from "@/app/reactQueryCalls/useAppointments";
 import ProgressBar from "@/app/_Components/loadingProgress";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function Dashboard() {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const { data: appointments, isLoading } = useAppointments();
-
-  if (isLoading) return <ProgressBar />;
+  const router = useRouter();
 
   const user = {
     name: session?.user?.name || "User",

@@ -12,13 +12,15 @@ import {
   StarIcon,
 } from "@heroicons/react/24/solid";
 import AppointmentSuccessModal from "@/app/_Components/Congratulations";
+import base64url from "base64url";
 
 export default function ProfessionalProfilePage() {
   const [showForm, setShowForm] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
 
   const params = useParams();
-  const id = Array.isArray(params.id) ? params.id[0] : params.id;
+  const encodedId = Array.isArray(params.id) ? params.id[0] : params.id;
+  const id = encodedId ? base64url.decode(encodedId) : undefined; // Decode only if available
 
   const { data: user, error, isLoading } = useUser(id ?? "");
 

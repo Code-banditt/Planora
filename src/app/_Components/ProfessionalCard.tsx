@@ -4,6 +4,7 @@ import { MapPinIcon } from "@heroicons/react/24/solid";
 import { ProfessionalData } from "../types";
 import { useRouter } from "next/navigation";
 import { Info } from "lucide-react";
+import base64url from "base64url";
 
 export default function ProfessionalCard({ pro }: { pro: ProfessionalData }) {
   const router = useRouter();
@@ -77,13 +78,17 @@ export default function ProfessionalCard({ pro }: { pro: ProfessionalData }) {
         {/* Buttons */}
         <div className="flex flex-col gap-2 mt-6">
           <button
-            onClick={() => router.push(`/profilePage/${pro._id}`)}
+            onClick={() =>
+              router.push(`/profilePage/${base64url.encode(pro._id)}`)
+            }
             className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 flex items-center justify-center gap-2"
           >
             <Info className="w-5 h-5" /> Info
           </button>
           <button
-            onClick={() => router.push(`/Appointment/${pro._id}`)}
+            onClick={() =>
+              router.push(`/Appointment/${base64url.encode(pro._id)}`)
+            }
             className="w-full border border-blue-600 text-blue-600 hover:bg-blue-50 font-medium py-2"
           >
             Book

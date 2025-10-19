@@ -11,10 +11,6 @@ export default async function GetUser(
   const { id } = await params; // ✅ await here
   const session = await getServerSession(authOptions);
 
-  if (!session) {
-    return NextResponse.json({ message: "Not authenticated" }, { status: 401 });
-  }
-
   await connectDB();
 
   try {

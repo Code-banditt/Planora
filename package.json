@@ -24,6 +24,7 @@
     "apexcharts": "^5.3.3",
     "autoprefixer": "^10.4.21",
     "axios": "^1.11.0",
+    "base64url": "^3.0.1",
     "bcryptjs": "^3.0.2",
     "date-fns": "^4.1.0",
     "echarts": "^6.0.0",

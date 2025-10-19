@@ -8,13 +8,15 @@ import Link from "next/link";
 import { useUser } from "../reactQueryCalls/useGetUsers";
 import { useParams, useRouter } from "next/navigation";
 import ProgressBar from "../_Components/loadingProgress";
+import base64url from "base64url";
 
 export default function PlanoraProfessionalProfile() {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const router = useRouter();
 
   const params = useParams();
-  const id = Array.isArray(params.id) ? params.id[0] : params.id; // always a string
+  const encodedId = Array.isArray(params.id) ? params.id[0] : params.id;
+  const id = encodedId ? base64url.decode(encodedId) : undefined; // Decode only if available
 
   const { data: user, error, isLoading } = useUser(id ?? "");
 

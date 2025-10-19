@@ -9,6 +9,7 @@ import { ProfessionalData } from "../types";
 import { toast } from "react-hot-toast";
 import { useAppointments } from "../reactQueryCalls/useAppointments";
 import { setHours, setMinutes } from "date-fns";
+import { useRouter } from "next/navigation";
 
 interface Payment {
   amount: number;
@@ -44,7 +45,7 @@ export default function AppointmentForm({
 }: AppointmentFormProps) {
   const { data: session } = useSession();
   const { mutate: bookAppointment } = useCreateAppointment();
-
+  const router = useRouter();
   const [date, setDate] = useState<Date | null>(null);
   const [selectedService, setSelectedService] = useState<{
     name: string;
@@ -142,6 +143,12 @@ export default function AppointmentForm({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!session?.user) {
+      toast.error("Please log in to book an appointment.");
+      router.push("/login"); // change '/login' to your actual login route
+      return;
+    }
+
     if (!date || !selectedService || !session?.user.id) return;
 
     const payload = {
