@@ -16,6 +16,7 @@ import {
   ChevronLeft,
   X,
 } from "lucide-react";
+import { useSession } from "next-auth/react";
 
 // SidebarLink Component
 function SidebarLink({ href, icon: Icon, label, collapsed, onClick }) {
@@ -42,6 +43,7 @@ function SidebarLink({ href, icon: Icon, label, collapsed, onClick }) {
 export default function DashboardLayout({ children }) {
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { data: session } = useSession(); // Placeholder for session data
 
   // Lock scroll when sidebar is open on mobile
   useEffect(() => {
@@ -60,7 +62,7 @@ export default function DashboardLayout({ children }) {
     { href: "/Dashboard/profile", label: "Profile", icon: User },
     { href: "/Dashboard/chats", label: "Chats", icon: MessageSquare },
     { href: "/Dashboard/Settings", label: "Settings", icon: Settings },
-    { href: "/Dashboard/admin", label: "Admin", icon: Shield },
+    { href: "/Dashboard/admin", label: "Settings", icon: Shield },
   ];
 
   return (
@@ -84,7 +86,14 @@ export default function DashboardLayout({ children }) {
           {/* Header */}
           <div className="flex items-center justify-between px-4 py-4">
             {!collapsed && (
-              <Link href="/" className="text-xl font-bold text-black">
+              <Link
+                href="/"
+                className="text-xl font-bold text-black"
+                onClick={() => {
+                  setMobileOpen(false);
+                  document.body.style.overflow = "auto"; // Reset scroll
+                }}
+              >
                 Planora
               </Link>
             )}
@@ -163,7 +172,7 @@ export default function DashboardLayout({ children }) {
               />
               {!collapsed && (
                 <>
-                  <span className="ml-3">Jacob Jones</span>
+                  <span className="ml-3">{session?.user?.name || "User"}</span>
                   <ChevronLeft className="ml-auto w-5 h-5" />
                 </>
               )}

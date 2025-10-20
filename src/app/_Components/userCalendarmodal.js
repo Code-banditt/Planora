@@ -39,7 +39,7 @@ export default function UserCalendarModal({ appointment, onClose }) {
       {
         appointmentId: appointment._id,
         status: "rescheduled",
-        date: newDate.toISOString(), // 👈 pass date if API supports it
+        date: newDate.toISOString(),
       },
       {
         onSuccess: () => {
@@ -60,40 +60,49 @@ export default function UserCalendarModal({ appointment, onClose }) {
       footer={null}
       title="Appointment Details"
       centered
+      className="max-w-lg w-full"
+      bodyStyle={{
+        maxHeight: "75vh",
+        overflowY: "auto",
+        paddingBottom: "1rem",
+      }}
     >
       {appointment && (
         <div className="space-y-6">
           {/* Client & Professional */}
-          <div className="flex justify-between items-start">
+          <div className="flex justify-between items-start flex-wrap gap-3">
             <div className="flex items-center gap-3">
               <Avatar style={{ backgroundColor: "#000", color: "#fff" }}>
                 {appointment.professional?.name?.charAt(0).toUpperCase()}
               </Avatar>
               <div>
-                <h2 className="font-semibold text-2xl">
+                <h2 className="font-semibold text-xl sm:text-2xl">
                   {appointment.professional?.name}
                 </h2>
-                <p className="text-gray-500 text-xs !-mt-3">
+                <p className="text-gray-500 text-xs sm:text-sm -mt-1">
                   {appointment.professional?.email}
                 </p>
               </div>
             </div>
-            <Tag color="blue">{appointment.type.toUpperCase()}</Tag>
+            <Tag color="blue" className="text-sm sm:text-base">
+              {appointment.type.toUpperCase()}
+            </Tag>
           </div>
 
-          <div className="flex gap-3">
-            <button className="bg-gray-900 !text-white py-2 px-3 rounded !mb-4 cursor-pointer">
-              message{" "}
+          {/* Quick Actions */}
+          <div className="flex flex-col sm:flex-row gap-3">
+            <button className="bg-gray-900 !text-white py-2 px-4 rounded w-full sm:w-auto">
+              Message{" "}
               <ChatBubbleBottomCenterIcon className="inline h-5 w-5 ml-2" />
             </button>
 
-            <button className="bg-gray-900 !text-white py-2 px-3 rounded !mb-4 cursor-pointer">
-              call <Phone className="inline h-5 w-5 ml-2" />
+            <button className="bg-gray-900 !text-white py-2 px-4 rounded w-full sm:w-auto">
+              Call <Phone className="inline h-5 w-5 ml-2" />
             </button>
           </div>
 
           {/* Service Info */}
-          <div className="space-y-1">
+          <div className="space-y-1 text-sm sm:text-base">
             <p>
               <strong>Service:</strong> {appointment.service}
             </p>
@@ -122,14 +131,14 @@ export default function UserCalendarModal({ appointment, onClose }) {
 
           {/* Notes */}
           {appointment.notes && (
-            <div className="p-3 bg-gray-50 rounded-md">
+            <div className="p-3 bg-gray-50 rounded-md text-sm sm:text-base">
               <strong className="block mb-1">Notes:</strong>
               <p className="text-gray-700">{appointment.notes}</p>
             </div>
           )}
 
           {/* Payment */}
-          <div className="border-t pt-3">
+          <div className="border-t pt-3 text-sm sm:text-base">
             <h3 className="font-semibold mb-2">Payment Info</h3>
             <p>
               <strong>Amount:</strong> {appointment.payment.amount}{" "}
@@ -154,10 +163,12 @@ export default function UserCalendarModal({ appointment, onClose }) {
             </p>
           </div>
 
-          {/* Status History with Timeline */}
+          {/* Status History */}
           {appointment.statusHistory && (
             <div className="border-t pt-3">
-              <h3 className="font-semibold mb-2">Status History</h3>
+              <h3 className="font-semibold mb-2 text-sm sm:text-base">
+                Status History
+              </h3>
               <Timeline mode="left">
                 {appointment.statusHistory.map((s, i) => (
                   <Timeline.Item
@@ -185,27 +196,41 @@ export default function UserCalendarModal({ appointment, onClose }) {
           )}
 
           {/* Actions */}
-          <div className="flex gap-2 justify-end pt-4 border-t">
-            {!rescheduleMode ? (
+          <div className="flex flex-col sm:flex-row sm:justify-end gap-3 pt-4 border-t">
+            {["completed", "cancelled"].includes(appointment.status) ? (
+              <p className="text-gray-500 text-center text-sm w-full sm:w-auto">
+                This appointment has been {appointment.status}.
+              </p>
+            ) : !rescheduleMode ? (
               <>
-                <Button danger loading={isLoading} onClick={handleCancel}>
+                <Button
+                  danger
+                  loading={isLoading}
+                  onClick={handleCancel}
+                  className="w-full sm:w-auto"
+                >
                   Cancel Appointment
                 </Button>
-                <Button type="primary" onClick={() => setRescheduleMode(true)}>
+                <Button
+                  type="primary"
+                  onClick={() => setRescheduleMode(true)}
+                  className="w-full sm:w-auto"
+                >
                   Reschedule Appointment
                 </Button>
               </>
             ) : (
-              <div className="flex gap-2">
+              <div className="flex flex-col sm:flex-row gap-2 w-full">
                 <DatePicker
                   showTime
                   onChange={(val) => setNewDate(val)}
-                  className="w-full"
+                  className="w-full sm:w-auto"
                 />
                 <Button
                   type="primary"
                   loading={isLoading}
-                  onClick={() => handleReschedule(newDate)}
+                  onClick={handleReschedule}
+                  className="w-full sm:w-auto"
                 >
                   Confirm Reschedule
                 </Button>

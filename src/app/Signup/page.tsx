@@ -4,6 +4,8 @@ import { useState } from "react";
 import Image from "next/image";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { set } from "mongoose";
+import ProgressBar from "../_Components/loadingProgress";
 
 export default function SignupPage() {
   const [formData, setFormData] = useState({
@@ -14,6 +16,7 @@ export default function SignupPage() {
 
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     handleChange(e);
@@ -34,6 +37,7 @@ export default function SignupPage() {
   // handle submit
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
 
     const response = await fetch("/api/auth/Signup", {
       method: "POST",
@@ -43,6 +47,7 @@ export default function SignupPage() {
 
     if (response.ok) {
       toast.success("✅ User registered successfully");
+      setIsLoading(false);
       router.push("/login");
     } else if (response.status === 409) {
       toast.error("❌ Email already in use");
@@ -51,6 +56,14 @@ export default function SignupPage() {
       toast.error("❌ Error:", errorData.error || "Error registering user");
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-screen w-screen">
+        <ProgressBar />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex">
@@ -161,7 +174,8 @@ export default function SignupPage() {
             {/* Submit */}
             <button
               type="submit"
-              className="w-full bg-blue-900 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg shadow-md transition"
+              className="w-full bg-blue-900 hover:bg-blue-700 !text-white font-semibold py-3 rounded-lg shadow-md transition"
+              disabled={isLoading}
             >
               Create account
             </button>

@@ -4,7 +4,6 @@ import { useState } from "react";
 import {
   Card,
   Avatar,
-  Flex,
   Button,
   Modal,
   Tag,
@@ -47,7 +46,6 @@ export default function ProAppointment() {
     return <ProgressBar />;
   }
 
-  // ✅ Handle action with confirm & feedback
   const handleAction = (data: AppointmentType, status: string) => {
     mutate(
       { appointmentId: data._id, status, date: data.date },
@@ -65,7 +63,6 @@ export default function ProAppointment() {
   const pendingAppointments =
     data?.filter((appt: AppointmentType) => appt.status === "pending") || [];
 
-  // ✅ Status colors
   const statusColors: Record<string, string> = {
     pending: "gold",
     accepted: "green",
@@ -76,18 +73,20 @@ export default function ProAppointment() {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="mb-6">
-        <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight">
+    <div className="space-y-6 px-2 sm:px-4 pb-8">
+      {/* Header */}
+      <div className="mt-2">
+        <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900">
           Appointments & Calendar
         </h1>
-        <p className="mt-1 text-base text-gray-600">
+        <p className="mt-1 text-sm sm:text-base text-gray-600">
           Manage your schedule — accept, reject, or reschedule with ease.
         </p>
       </div>
 
-      <div className="p-4">
-        <h2 className="font-semibold text-sm text-gray-900 mb-4">
+      {/* Appointments Section */}
+      <div>
+        <h2 className="font-semibold text-sm sm:text-base text-gray-900 mb-4">
           Incoming Appointment Requests
         </h2>
 
@@ -96,14 +95,15 @@ export default function ProAppointment() {
         ) : pendingAppointments.length === 0 ? (
           <Empty description="No pending appointments" />
         ) : (
-          <Flex gap="middle" wrap>
+          // ✅ Responsive Grid instead of Flex
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {data
               ?.filter((appt: AppointmentType) => appt.status === "pending")
               .map((appt: AppointmentType) => (
                 <Card
                   key={appt._id}
                   loading={loading}
-                  style={{ minWidth: 350, marginBottom: 16 }}
+                  className="w-full"
                   actions={[
                     <EditOutlined key="edit" />,
                     <SettingOutlined key="setting" />,
@@ -116,7 +116,7 @@ export default function ProAppointment() {
                         style={{ cursor: "pointer" }}
                         onClick={() => showProfileModal(appt.client)}
                       >
-                        {!appt.client?.name
+                        {appt.client.name
                           ? appt.client.name.charAt(0).toUpperCase()
                           : null}
                       </Avatar>
@@ -139,21 +139,23 @@ export default function ProAppointment() {
                           <strong>Type —</strong> {appt.type}
                         </p>
 
-                        {/* ✅ Status Badge */}
                         <Tag color={statusColors[appt.status]}>
                           {appt.status.toUpperCase()}
                         </Tag>
 
-                        {/* ✅ Confirmed actions */}
                         {appt.status === "pending" && (
-                          <div className="mt-3 flex gap-2">
+                          <div className="mt-3 flex flex-wrap gap-2">
                             <Popconfirm
                               title="Accept this appointment?"
                               onConfirm={() => handleAction(appt, "accepted")}
                               okText="Yes"
                               cancelText="No"
                             >
-                              <Button type="primary" loading={isPending}>
+                              <Button
+                                type="primary"
+                                size="small"
+                                loading={isPending}
+                              >
                                 Accept
                               </Button>
                             </Popconfirm>
@@ -164,7 +166,7 @@ export default function ProAppointment() {
                               okText="Yes"
                               cancelText="No"
                             >
-                              <Button danger loading={isPending}>
+                              <Button danger size="small" loading={isPending}>
                                 Reject
                               </Button>
                             </Popconfirm>
@@ -175,56 +177,56 @@ export default function ProAppointment() {
                   />
                 </Card>
               ))}
-          </Flex>
+          </div>
         )}
       </div>
 
-      {/* ✅ Improved Profile Modal */}
+      {/* Profile Modal */}
       <Modal
-        title={null} // remove default title for cleaner design
+        title={null}
         open={isModalOpen}
         onCancel={() => setIsModalOpen(false)}
         footer={null}
         centered
+        width={320}
+        className="max-w-[90vw]"
       >
         {selectedClient && (
           <div className="flex flex-col items-center text-center space-y-4 p-4">
-            {/* Avatar */}
             <Avatar size={96}>
               {selectedClient.name
                 ? selectedClient.name.charAt(0).toUpperCase()
                 : null}
             </Avatar>
 
-            {/* Name & Email */}
             <div>
-              <h2 className="text-xl font-semibold">{selectedClient.name}</h2>
-              <p className="text-gray-500">{selectedClient.email}</p>
+              <h2 className="text-lg font-semibold">{selectedClient.name}</h2>
+              <p className="text-gray-500 text-sm">{selectedClient.email}</p>
             </div>
 
-            {/* Quick Stats (Optional: you can add appointments count, status etc.) */}
-            <div className="flex gap-4">
+            <div className="flex justify-center gap-6">
               <div className="text-center">
-                <p className="font-bold">12</p>
+                <p className="font-bold text-base">12</p>
                 <p className="text-xs text-gray-500">Appointments</p>
               </div>
               <div className="text-center">
-                <p className="font-bold">5</p>
+                <p className="font-bold text-base">5</p>
                 <p className="text-xs text-gray-500">Completed</p>
               </div>
             </div>
 
-            {/* Action buttons */}
             <div className="flex gap-3 mt-4">
-              <Button type="primary">View Details</Button>
-              <Button>Message</Button>
+              <Button type="primary" size="small">
+                View Details
+              </Button>
+              <Button size="small">Message</Button>
             </div>
           </div>
         )}
       </Modal>
 
-      {/* ✅ Calendar  */}
-      <div className="p-2 mt-6">
+      {/* Calendar Section */}
+      <div className="mt-6">
         <AppointmentCalendar />
       </div>
     </div>

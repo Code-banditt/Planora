@@ -6,16 +6,18 @@ import { useState } from "react";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
+import ProgressBar from "../_Components/loadingProgress";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-
+  const [isLoading, setIsLoading] = useState(false); // 👈 added state
   const router = useRouter();
 
   const handlelogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true); // start loading
 
     const result = await signIn("credentials", {
       redirect: false,
@@ -27,9 +29,18 @@ export default function LoginPage() {
       toast.error(result.error);
     } else {
       toast.success("logged in");
+      setIsLoading(false); // stop loading
       router.push("/");
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-screen w-screen">
+        <ProgressBar />
+      </div>
+    );
+  }
 
   return (
     <>
@@ -134,7 +145,8 @@ export default function LoginPage() {
               {/* Submit Button */}
               <button
                 type="submit"
-                className="w-full bg-blue-900 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold shadow-md transition !mt-4 cursor-pointer"
+                className="w-full bg-blue-900 hover:bg-blue-700 !text-white py-3 rounded-lg font-semibold shadow-md transition !mt-4 cursor-pointer"
+                disabled={isLoading}
               >
                 SIGN IN
               </button>

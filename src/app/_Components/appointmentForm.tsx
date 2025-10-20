@@ -177,16 +177,19 @@ export default function AppointmentForm({
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50">
-      <div className="bg-white text-black rounded-2xl shadow-xl max-w-3xl w-full grid grid-cols-1 md:grid-cols-2 overflow-hidden">
+    <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50 p-2">
+      <div className="bg-white text-black rounded-2xl shadow-xl w-full max-w-3xl md:grid md:grid-cols-2 overflow-hidden max-h-[90vh] overflow-y-auto">
         {/* Left: Form */}
-        <form onSubmit={handleSubmit} className="p-6 space-y-4">
-          <h2 className="text-xl font-bold mb-4">Book Appointment</h2>
+        <form
+          onSubmit={handleSubmit}
+          className="p-4 sm:p-6 space-y-3 sm:space-y-4"
+        >
+          <h2 className="text-xl font-bold mb-2 sm:mb-4">Book Appointment</h2>
 
           <div>
             <label className="block font-medium">Select Date & Time</label>
             <DatePicker
-              className="w-80 border rounded-lg px-3 py-2 mt-1"
+              className="w-64 border rounded-lg px-3 py-2 mt-1"
               selected={date}
               onChange={(d) => setDate(d!)}
               showTimeSelect
@@ -196,12 +199,11 @@ export default function AppointmentForm({
                   .some((name) => dayMap[name.toLowerCase()] === d.getDay())
               }
               filterTime={(time) => {
-                // only allow time if it's NOT already booked for the same day
                 return !bookedDates.some(
                   (booked) =>
-                    booked.toDateString() === time.toDateString() && // same calendar day
-                    booked.getHours() === time.getHours() && // same hour
-                    booked.getMinutes() === time.getMinutes() // same minute
+                    booked.toDateString() === time.toDateString() &&
+                    booked.getHours() === time.getHours() &&
+                    booked.getMinutes() === time.getMinutes()
                 );
               }}
               minDate={new Date()}
@@ -321,7 +323,7 @@ export default function AppointmentForm({
             </select>
           </div>
 
-          <div className="flex justify-end gap-3">
+          <div className="flex justify-end gap-3 pt-2">
             <button
               type="button"
               onClick={onClose}
@@ -340,7 +342,7 @@ export default function AppointmentForm({
 
         {/* Right: professional profile */}
         <div
-          className="flex flex-col justify-center items-center p-6 text-center bg-cover bg-center rounded-r-xl"
+          className="flex flex-col justify-center items-center p-6 text-center bg-cover bg-center rounded-b-2xl md:rounded-r-xl md:rounded-b-none"
           style={{ backgroundImage: `url(${professional.avatar})` }}
         >
           <div className="bg-black/40 p-4 rounded-xl">

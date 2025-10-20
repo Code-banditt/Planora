@@ -185,27 +185,42 @@ export default function CalendarApptModal({ appointment, onClose }) {
           )}
 
           {/* Actions */}
-          <div className="flex gap-2 justify-end pt-4 border-t">
-            {!rescheduleMode ? (
+          {/* Actions */}
+          <div className="flex flex-col sm:flex-row sm:justify-end gap-3 pt-4 border-t">
+            {["completed", "cancelled"].includes(appointment.status) ? (
+              <p className="text-gray-500 text-sm text-center w-full sm:w-auto">
+                This appointment has been {appointment.status}.
+              </p>
+            ) : !rescheduleMode ? (
               <>
-                <Button danger loading={isLoading} onClick={handleCancel}>
+                <Button
+                  danger
+                  loading={isLoading}
+                  onClick={handleCancel}
+                  className="w-full sm:w-auto"
+                >
                   Cancel
                 </Button>
-                <Button type="primary" onClick={() => setRescheduleMode(true)}>
+                <Button
+                  type="primary"
+                  onClick={() => setRescheduleMode(true)}
+                  className="w-full sm:w-auto"
+                >
                   Reschedule
                 </Button>
               </>
             ) : (
-              <div className="flex gap-2">
+              <div className="flex flex-col sm:flex-row gap-2 w-full">
                 <DatePicker
                   showTime
                   onChange={(val) => setNewDate(val)}
-                  className="w-full"
+                  className="w-full sm:w-auto"
                 />
                 <Button
                   type="primary"
                   loading={isLoading}
-                  onClick={() => handleReschedule(newDate)}
+                  onClick={handleReschedule}
+                  className="w-full sm:w-auto"
                 >
                   Confirm Reschedule
                 </Button>
