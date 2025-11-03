@@ -1,6 +1,10 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+Planora is a full-stack appointment scheduling platform designed for professionals and clients to book, manage, and track appointments with ease.  
+It provides real-time scheduling, secure authentication, and a smooth dashboard experience.
+
 ## Getting Started
+
 
 First, run the development server:
 
