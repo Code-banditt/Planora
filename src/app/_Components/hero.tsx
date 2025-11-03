@@ -56,11 +56,11 @@ export default function LandingHero() {
                   </Link>
                 </div>
 
-                <p className="!mt-5 text-blue-950">
+                <p className="!mt-3 text-blue-950">
                   Or do you wanna be a pro?{" "}
                   <Link
                     href="/FormPage"
-                    className="text-black font-semibold hover:underline"
+                    className="!text-blue-900 font-semibold hover:underline"
                   >
                     Become a Pro
                   </Link>
